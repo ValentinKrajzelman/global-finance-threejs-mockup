@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "react": "^18",
+    "@react-three/drei": "^9.11.3",
+    "@react-three/fiber": "^8.0.22",
     "react-dom": "^18",
     "next": "14.0.1",
     "@studio-freight/lenis": "^0.2.28",
