@@ -5,7 +5,6 @@ import Image from "next/image";
 export default function Home() {
 
   if(true){
-  console.log("asdfasdf")
   import("../../components/canvasFiber.ts")
   }
   

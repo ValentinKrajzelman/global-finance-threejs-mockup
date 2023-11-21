@@ -13,6 +13,9 @@ import {
   WebGLRenderer,
 } from "three";
 
+// import { OrbitControls } from "@react-three/drei";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
 
   const scene = new Scene();
   
@@ -41,6 +44,8 @@ import {
     cube.material = material;
     
     scene.add(cube);
+
+    
     
     //render, el webglrenderer es el mas comun, hay que especificar
     //alpha true para que el canvas sea transparente sino
@@ -51,7 +56,9 @@ import {
     
     //buscamos el lugar en la app donde queremos renderizar el canvas
     const container = document.getElementById("asdf");
-    
+
+    const orbit = new OrbitControls(camera, renderer.domElement);
+    orbit.update();
     //si existe el elemento renderizamos el canvas ahi
     if (container) {
       container.appendChild(renderer.domElement);
