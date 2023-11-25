@@ -1,17 +1,17 @@
 "use client"
-import Image from "next/image";
+// import Image from "next/image";
 // import "../components/canvasFiber.ts"
 
 export default function Home() {
 
-  if(true){
-  import("../../components/canvasFiber.ts")
+  if (true) {
+    import("../../components/canvasFiber.js")
   }
-  
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
+    <main className="flex min-h-screen flex-col items-center justify-between bg-slate-600">
       <div className="absolute" id="asdf"></div>
-      <div className="bg-slate-950 flex flex-col">
+      {/* <div className="bg-slate-950 flex flex-col">
         <div className="self-center flex w-full max-w-[1198px] flex-col mt-8 px-5 max-md:max-w-full">
           <div className="justify-between items-start self-center flex w-full gap-5 -ml-5 pl-16 max-md:max-w-full max-md:flex-wrap">
             <div className="items-start self-stretch flex w-[657px] max-w-full justify-between gap-5 pr-px max-md:flex-wrap max-md:justify-center">
@@ -557,7 +557,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }
