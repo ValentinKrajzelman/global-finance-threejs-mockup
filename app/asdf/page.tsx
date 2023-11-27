@@ -2,6 +2,8 @@
 // import Image from "next/image";
 // import "../components/canvasFiber.ts"
 
+// import plata from "/public/playa.png"
+
 export default function Home() {
 
   if (true) {
@@ -11,6 +13,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-slate-600">
       <div className="absolute" id="asdf"></div>
+      
       {/* <div className="bg-slate-950 flex flex-col">
         <div className="self-center flex w-full max-w-[1198px] flex-col mt-8 px-5 max-md:max-w-full">
           <div className="justify-between items-start self-center flex w-full gap-5 -ml-5 pl-16 max-md:max-w-full max-md:flex-wrap">
