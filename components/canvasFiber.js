@@ -37,8 +37,8 @@ const scene = new Scene();
 //sacamos la posicion normalizada del mouse
 const mousePosition = new three.Vector2;
 window.addEventListener('mousemove', function(e){
-  mousePosition.x = (e.clientX / window.innerWidth) * 2 -1;
-  mousePosition.y = (e.clientY / window.innerHeight) * 2 -1;
+  mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mousePosition.y = (e.clientY / window.innerHeight ) * -2 + 1;
 })
 
 //declaramos un raycaster
@@ -72,8 +72,8 @@ spotLight.castShadow = true;
 // spotLight.shadow.camera.far = 4000;
 // spotLight.shadow.camera.fov = 30;
 
-const slighthelper = new three.SpotLightHelper(spotLight);
-scene.add(slighthelper)
+// const slighthelper = new three.SpotLightHelper(spotLight);
+// scene.add(slighthelper)
 
 //declaramos una camara, field of view, ratio de aspecto, distacia
 //inicia de vista y distancia final
@@ -123,7 +123,7 @@ scene.add(cube, helper, spotLight, plano);
 //va a mostrar un background en negro solido
 const renderer = new WebGLRenderer({ alpha: true });
 //le damos al canvas el tamaño de la pantalla
-renderer.setSize(1000 * 1.7, 1000);
+renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 
 //pone un color de background
@@ -135,6 +135,10 @@ scene.background = textureLoader.load(playa.src);
 //inicializamos otra caja y le ponemos una imagen como textura (para todas las caras)
 const box2Geo = new three.BoxGeometry(2, 2, 2);
 const box2Mat = new three.MeshStandardMaterial({
+  map: textureLoader.load(playa.src)
+})
+const box3Geo = new three.BoxGeometry(2, 2, 2);
+const box3Mat = new three.MeshStandardMaterial({
   map: textureLoader.load(playa.src)
 })
 
@@ -155,8 +159,21 @@ const box2 = new three.Mesh(box2Geo, box2Mat);
 // const box2 = new three.Mesh(box2Geo, box2MulMat);
 scene.add(box2);
 box2.position.set(5, 5, 5);
-const sphereId = box2.id;
-console.log(box2.id);
+// const sphereId = box2.id;
+// console.log(box2.uuid);
+
+
+//hacemos un mesh con un solo material para cada cara
+const box3 = new three.Mesh(box3Geo, box3Mat);
+//hacemos un mesh definiendo el material de cada cara
+// const box2 = new three.Mesh(box2Geo, box2MulMat);
+scene.add(box3);
+box3.position.set(8, 8, 8);
+box3.material.color.set(0xFF0066);
+// const sphereId = box2.id;
+console.log(box2.uuid,box3.uuid);
+
+
 
 //fog deja de mostrar los mesh a medida que te alejas de ellos
 //esta primera opcion de implementacion hace que se sobreponga linealmente sobre los mesh 
@@ -189,6 +206,10 @@ gui.add(options, 'angle', 0, 1);
 gui.add(options, 'penumbra', 0, 1);
 gui.add(options, 'intensity', 0, 1);
 
+
+const nuestroCubo = scene.children.findIndex((a)=>{return a.uuid == box2.uuid});
+const nuestroCubo2 = scene.children.findIndex((a)=>{return a.uuid == box3.uuid});
+
 //animate es una funcion que se llama por cada frame de la escena
 let step = 0;
 function animate() {
@@ -202,19 +223,28 @@ function animate() {
   spotLight.angle = options.angle;
   spotLight.penumbra = options.penumbra;
   spotLight.intensity = options.intensity;
-  slighthelper.update();
+  // slighthelper.update();
   
   raycaster.setFromCamera(mousePosition, camera);
-  const intersects = raycaster.intersectObjects(scene.children);
-  console.log(intersects);
-  
-  for(let i=0;i<intersects.length;i++){
-    if(intersects[i].object.id === sphereId){
-      // intersects[i].object.material.color.set(0xFF0066);
-      intersects[i].object.rotation.y += 0.01;
-      intersects[i].object.rotation.x += 0.01; 
-    }
+  //esto utiliza el raycaster y le pregunta si se cruzo algunos de los items especificados,
+  //si es asi aplica la propiedad al mas cercano
+  const intersects = raycaster.intersectObjects([scene.children[nuestroCubo],scene.children[nuestroCubo2]]);
+  if(intersects[0]){
+    intersects[0].object.rotation.y += 0.01;
+    intersects[0].object.rotation.x += 0.01;
   }
+  console.log(intersects)
+  
+  //esto lo que hace es declrar un raycaster que pone en un array cada objeto bajo el cursor
+  //despues recorre el array y se fija si un objeto esta bajo el cursor para aplicarle un cambio
+  //de estado, en este caso una rotacion
+  // for(let i=0;i<intersects.length;i++){
+  //   if(intersects[i].object.id === sphereId){
+      // intersects[i].object.material.color.set(0xFF0066);
+    //     intersects[0].object.rotation.y += 0.01;
+    //     intersects[0].object.rotation.x += 0.01
+    // }
+  // }
   
   
   step += options.speed;

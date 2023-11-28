@@ -11,8 +11,8 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between bg-slate-600">
-      <div className="absolute" id="asdf"></div>
+    <main id="asdf" className="flex min-h-screen min-w-screen w-screen flex-col items-center justify-between bg-slate-600">
+      {/* <div className="absolute" ></div> */}
       
       {/* <div className="bg-slate-950 flex flex-col">
         <div className="self-center flex w-full max-w-[1198px] flex-col mt-8 px-5 max-md:max-w-full">
