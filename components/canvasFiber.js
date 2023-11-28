@@ -12,6 +12,7 @@ import {
   Scene,
   WebGLRenderer,
 } from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 import * as three from "three"
 import * as dat from "dat.gui"
@@ -20,6 +21,8 @@ import playa from "../public/playa.png"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const gui = new dat.GUI();
+
+const jack = new URL("../public/jack.glb", import.meta.url);
 
 const options = {
   sphereColor: '#ffea00',
@@ -126,6 +129,13 @@ const renderer = new WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 
+//vamos a hacer el canvas responsive
+window.addEventListener('resize', function(){
+camera.aspect = window.innerWidth/window.innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(window.innerWidth,window.innerHeight)
+});
+
 //pone un color de background
 // renderer.setClearColor(0xFFEA0);
 //pone una imagen plana de background
@@ -160,7 +170,6 @@ const box2 = new three.Mesh(box2Geo, box2Mat);
 scene.add(box2);
 box2.position.set(5, 5, 5);
 // const sphereId = box2.id;
-// console.log(box2.uuid);
 
 
 //hacemos un mesh con un solo material para cada cara
@@ -171,9 +180,46 @@ scene.add(box3);
 box3.position.set(8, 8, 8);
 box3.material.color.set(0xFF0066);
 // const sphereId = box2.id;
-console.log(box2.uuid,box3.uuid);
 
 
+//hacemos un plano
+const planoMesh = new three.PlaneGeometry(10,10,10,10);
+const planoMaterial = new three.MeshStandardMaterial({color:0xffffff, wireframe: true});
+const plano2 = new three.Mesh(planoMesh, planoMaterial);
+scene.add(plano2);
+plano2.position.set(15,15,15)
+plano2.geometry.attributes.position.array[3] -= 15;
+plano2.geometry.attributes.position.array[4] -= 15;
+plano2.geometry.attributes.position.array[5] -= 15;
+
+
+
+//aca habia que hacer otro plano definiendo su material con shaders pero no lo pude hacer funcionar
+//tenia que crea otro archivo y no se que mas
+// const vShader = `
+// void main(){
+//   gl_Position = projectionMatix * modelViewMatrix * vec4(position,1.0)
+// }`
+// const fShader = `
+// void main(){
+//   gl_FragColor = vec4(0.5,0.5,1.0,1.0)
+// }`
+// const planoMesh2 = new three.PlaneGeometry(10,10,10,10);
+// const planoMaterial2 = new three.ShaderMaterial({
+//   vertexShader: vShader,
+//   fragmentShader: fShader
+// });
+// const plano3 = new three.Mesh(planoMesh2, planoMaterial2);
+// scene.add(plano3);
+// plano3.position.set(-5,10,-5)
+
+//vamos a importar un modelo externo
+const assetLoader = new GLTFLoader();
+
+assetLoader.load(jack.href, function(gltf){
+const model = gltf.scene;
+scene.add(model);
+});
 
 //fog deja de mostrar los mesh a medida que te alejas de ellos
 //esta primera opcion de implementacion hace que se sobreponga linealmente sobre los mesh 
@@ -232,9 +278,7 @@ function animate() {
   if(intersects[0]){
     intersects[0].object.rotation.y += 0.01;
     intersects[0].object.rotation.x += 0.01;
-  }
-  console.log(intersects)
-  
+  }  
   //esto lo que hace es declrar un raycaster que pone en un array cada objeto bajo el cursor
   //despues recorre el array y se fija si un objeto esta bajo el cursor para aplicarle un cambio
   //de estado, en este caso una rotacion
