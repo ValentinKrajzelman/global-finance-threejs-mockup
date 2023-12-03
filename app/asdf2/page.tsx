@@ -1,8 +1,4 @@
 "use client"
-// import Image from "next/image";
-// import "../components/canvasFiber.ts"
-
-// import plata from "/public/playa.png"
 
 export default function Home() {
 
@@ -11,7 +7,7 @@ export default function Home() {
   }
 
   return (
-    <main id="asdf" className="flex min-h-screen min-w-screen w-screen flex-col items-center justify-between bg-slate-600">
+    <main id="CanvasTuto" className="flex min-h-screen min-w-screen w-screen flex-col items-center justify-between bg-slate-600">
       {/* <div className="absolute" ></div> */}
       
       {/* <div className="bg-slate-950 flex flex-col">

@@ -20,10 +20,9 @@ import * as dat from "dat.gui"
 import playa from "../public/playa.png"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-const gui = new dat.GUI();
-
 const jack = new URL("../public/jack.glb", import.meta.url);
 
+const gui = new dat.GUI();
 const options = {
   sphereColor: '#ffea00',
   wireframe: false,
