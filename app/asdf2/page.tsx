@@ -1,20 +1,16 @@
 "use client"
-// import Image from "next/image";
-// import "../components/canvasFiber.ts"
-
-// import plata from "/public/playa.png"
 
 export default function Home() {
 
   if (true) {
-    import("../../components/canvasFiber.js")
+    import("../../components/segundoTutoPlanetas.js")
   }
 
   return (
-    <main  className="relative flex min-h-screen min-w-screen w-screen flex-col items-center justify-between bg-slate-600">
-      <div id="asdf" className="fixed" ></div>
+    <main id="CanvasTuto" className="flex min-h-screen min-w-screen w-screen flex-col items-center justify-between bg-slate-600">
+      {/* <div className="absolute" ></div> */}
       
-      <div className="absolute flex flex-col w-[40rem]">
+      {/* <div className="bg-slate-950 flex flex-col">
         <div className="self-center flex w-full max-w-[1198px] flex-col mt-8 px-5 max-md:max-w-full">
           <div className="justify-between items-start self-center flex w-full gap-5 -ml-5 pl-16 max-md:max-w-full max-md:flex-wrap">
             <div className="items-start self-stretch flex w-[657px] max-w-full justify-between gap-5 pr-px max-md:flex-wrap max-md:justify-center">
@@ -560,7 +556,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }
