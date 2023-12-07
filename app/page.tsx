@@ -9,7 +9,9 @@ const Inicio = () => {
     <div>
       <Link href="/asdf"> asdf
       </Link>
-      <Link href="/asdf"> asdf2
+      <Link href="/asdf2"> asdf2
+      </Link>
+      <Link href="/asdf3"> asdf3
       </Link>
     </div>
   )

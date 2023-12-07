@@ -7,12 +7,12 @@
 export default function Home() {
 
   if (true) {
-    import("../../components/canvasFiber.js")
+    import("../../components/tercerTuto.js")
   }
 
   return (
-    <main  className="relative flex min-h-screen min-w-screen w-screen flex-col items-center justify-between bg-slate-600">
-      <div id="asdf" className="fixed" ></div>
+    <main  className="relative flex min-h-screen min-w-screen w-screen flex-col items-center justify-between">
+      <div id="tercerTuto" className="fixed"></div>
       
       {/* <div className="absolute flex flex-col w-[40rem]">
         <div className="self-center flex w-full max-w-[1198px] flex-col mt-8 px-5 max-md:max-w-full">
