@@ -13,6 +13,8 @@ const Inicio = () => {
       </Link>
       <Link href="/asdf3"> asdf3
       </Link>
+      <Link href="/asdf4"> asdf4
+      </Link>
     </div>
   )
 }
