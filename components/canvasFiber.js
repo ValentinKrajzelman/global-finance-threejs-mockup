@@ -181,7 +181,7 @@ box3.material.color.set(0xFF0066);
 // const sphereId = box2.id;
 
 
-//hacemos un plano
+//hacemos un plano y tomamos uno de sus vertices (el segundo (3,4,5)) y lo movemos
 const planoMesh = new three.PlaneGeometry(10,10,10,10);
 const planoMaterial = new three.MeshStandardMaterial({color:0xffffff, wireframe: true});
 const plano2 = new three.Mesh(planoMesh, planoMaterial);
@@ -273,6 +273,7 @@ function animate() {
   raycaster.setFromCamera(mousePosition, camera);
   //esto utiliza el raycaster y le pregunta si se cruzo algunos de los items especificados,
   //si es asi aplica la propiedad al mas cercano
+  //(de los especificados en el array de intersectobjects, sino no los identifica)
   const intersects = raycaster.intersectObjects([scene.children[nuestroCubo],scene.children[nuestroCubo2]]);
   if(intersects[0]){
     intersects[0].object.rotation.y += 0.01;
