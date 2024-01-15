@@ -4,6 +4,10 @@
 //hacen bastante menos verboso pero tiene las mismas capacidades de three, todo lo configurable en
 //three lo es tambien en fiber, al ser un wrapper es simplemente una modificacion de sintaxis en compilacion
 
+//en este componente no solo inicializamos el back ground, y otras cosas sino tambien el terreno que fue generado
+//automaticamente con gltfjsx, una herramienta a la que se le da un objeto glb complejo y lo transforma en un
+//componente JSX que se puede pasar directamente al proyecto, como airplane.jsx
+
 import { useEffect, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
@@ -13,10 +17,11 @@ import {
   OrbitControls,
   useTexture,
   MeshReflectorMaterial,
-  useGLTF
+  useGLTF,
 } from "@react-three/drei";
 import { BackSide, Color, MeshStandardMaterial } from "three";
-import mapaa from "../public/envmap.jpg";
+import mapaa from "../../public/envmap.jpg";
+import { Airplane } from "./Airplane";
 
 export default function Cuadrado() {
   const mapa = useTexture(mapaa.src);
@@ -69,77 +74,85 @@ export default function Cuadrado() {
   return (
     <>
       <Suspense fallback={null}>
+        {/* este mesh es una esfera que contiene el resto del mapa, la usamos de background */}
         <mesh>
           <sphereGeometry args={[60, 50, 50]} />
           <meshBasicMaterial side={BackSide} map={mapa} />
         </mesh>
-        <Environment background={false} files={'/envmap.hdr'} />
+        {/* esto es como el background que usan los mesh para los reflejos, pero no entiendo como funciona*/}
+        <Environment background={false} files={"/envmap.hdr"} />
+
         {/* esta es una camara importada de drei que es compatible con hot reload */}
         <PerspectiveCamera makeDefault fov={75} position={[0, 10, 10]} />
         <OrbitControls target={[0, 0, 0]} />
 
-        <group dispose={null}>
-      <mesh
-        geometry={nodes.landscape_gltf.geometry}
-        material={materials["Material.009"]}
-        castShadow
-        receiveShadow
-      />
-      <mesh
-        geometry={nodes.landscape_borders.geometry}
-        material={materials["Material.010"]}
-      />
-      <mesh
-        geometry={nodes.trees_light.geometry}
-        material={materials["Material.008"]}
-        castShadow
-        receiveShadow
-      />
-      <mesh
-        position={[-2.536, 1.272, 0.79]}
-        rotation={[-Math.PI * 0.5, 0, 0]}
-        scale={[1.285, 1.285, 1]}
-      >
-        <planeGeometry args={[1, 1]} />
-        {waterMaterial}
-      </mesh>
-      <mesh
-        position={[1.729, 0.943, 2.709]}
-        rotation={[-Math.PI * 0.5, 0, 0]}
-        scale={[3, 3, 1]}
-      >
-        <planeGeometry args={[1, 1]} />
-        {waterMaterial}
-      </mesh>
-      <mesh
-        position={[0.415, 1.588, -2.275]}
-        rotation={[-Math.PI * 0.5, 0, 0]}
-        scale={[3.105, 2.405, 1]}
-      >
-        <planeGeometry args={[1, 1]} />
-        {waterMaterial}
-      </mesh>
-      <mesh
-        geometry={nodes.lights.geometry}
-        material={lightsMaterial}
-        castShadow
-      />
-    </group>
-
-        <directionalLight castShadow
-        intensity={2}
-        position={[10,5,4]}
-        shadow-bias={-0.0005}
-        // shadow={}
+        {/* luz direccional */}
+        <directionalLight
+          castShadow
+          color={"#f3d29a"}
+          intensity={2}
+          position={[10, 5, 4]}
+          shadow-bias={-0.0005}
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+          shadow-camera-near={0.01}
+          shadow-camera-far={20}
+          shadow-camera-top={6}
+          shadow-camera-bottom={-6}
+          shadow-camera-left={-6.2}
+          shadow-camera-right={6.4}
         />
-        {/* esto es el environment es una esfera que engloba el mapa con una textura granulada para simular velocidad  */}
-        {/* <mesh>
-            //normalmente en fiber un componente child de otro esta nestedado (.add(componente)) pero en el caso especial de 
-            //los dos componentes de abajo son tratados como propiedades del objeto mesh una vez compiladas
-            //a three por que por default se les asigna la propiedad attach que triggerea ese comportamiento
-            <boxGeometry />
-            <meshStandardMaterial />
-          </mesh> */}
+
+        {/* <Airplane/> */}
+
+        {/* este es el terreno, cada uno de los mesh es un nodo de geometria de blender*/}
+        <group dispose={null}>
+          <mesh
+            geometry={nodes.landscape_gltf.geometry}
+            material={materials["Material.009"]}
+            castShadow
+            receiveShadow
+          />
+          <mesh
+            geometry={nodes.landscape_borders.geometry}
+            material={materials["Material.010"]}
+          />
+          <mesh
+            geometry={nodes.trees_light.geometry}
+            material={materials["Material.008"]}
+            castShadow
+            receiveShadow
+          />
+          <mesh
+            position={[-2.536, 1.272, 0.79]}
+            rotation={[-Math.PI * 0.5, 0, 0]}
+            scale={[1.285, 1.285, 1]}
+          >
+            <planeGeometry args={[1, 1]} />
+            {waterMaterial}
+          </mesh>
+          <mesh
+            position={[1.729, 0.943, 2.709]}
+            rotation={[-Math.PI * 0.5, 0, 0]}
+            scale={[3, 3, 1]}
+          >
+            <planeGeometry args={[1, 1]} />
+            {waterMaterial}
+          </mesh>
+          <mesh
+            position={[0.415, 1.588, -2.275]}
+            rotation={[-Math.PI * 0.5, 0, 0]}
+            scale={[3.105, 2.405, 1]}
+          >
+            <planeGeometry args={[1, 1]} />
+            {waterMaterial}
+          </mesh>
+          <mesh
+            geometry={nodes.lights.geometry}
+            material={lightsMaterial}
+            castShadow
+          />
+        </group>
       </Suspense>
     </>
   );

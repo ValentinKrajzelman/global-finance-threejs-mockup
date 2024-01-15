@@ -1,5 +1,5 @@
 "use client";
-import Cuadrado from "../../components/canvasThreePuro";
+import Cuadrado from "../../components/cuartoTuto/canvasThreePuro";
 import { Canvas } from "@react-three/fiber";
 
 export default function Home() {
