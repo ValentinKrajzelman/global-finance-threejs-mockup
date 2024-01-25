@@ -13,6 +13,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import {
   PerspectiveCamera,
+  OrthographicCamera,
   Environment,
   OrbitControls,
   useTexture,
@@ -88,8 +89,11 @@ export default function Cuadrado() {
         <Environment background={false} files={"/envmap.hdr"} />
 
         {/* esta es una camara importada de drei que es compatible con hot reload */}
+
         <PerspectiveCamera makeDefault fov={75} position={[0, 10, 10]} />
-        {/* <OrbitControls target={[0, 0, 0]} /> */}
+        {/* 
+        
+        <OrbitControls target={[0, 0, 0]} /> */}
 
         {/* luz direccional */}
         <directionalLight

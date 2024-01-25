@@ -4,12 +4,12 @@ function easeOutQuad(x) {
   return 1 - (1 - x) * (1 - x);
 }
 
-//event listener para saber que tecla se presiono
+//event listener para saber cuando se presiona una tecla 
 window.addEventListener("keydown", (e) => {
     controls[e.key.toLowerCase()] = true;
 });
 
-//event listener para saber que tecla se dejo de presionar
+//event listener para saber cuando se deja de presionar
 window.addEventListener("keyup", (e) => {
   controls[e.key.toLowerCase()] = false;
 });
@@ -20,11 +20,15 @@ let pitchVelocity = 0;
 let planeSpeed = 0.006;
 export let turbo = 0;
 export function updatePlaneAxis(x, y, z, planePosition, camera) {
+  //reduce la velocidad
   jawVelocity *= 0.95;
   pitchVelocity *= 0.95;
 
+  //verifica que no se alcanze la vel max y si es el caso vuelve el valor a vel max
   if (Math.abs(jawVelocity) > maxVelocity) 
+  //math.sign indica si es positivo o negativo y lo multiplica por velmax para obligar a quede con el valor maximo
     jawVelocity = Math.sign(jawVelocity) * maxVelocity;
+
 
   if (Math.abs(pitchVelocity) > maxVelocity) 
     pitchVelocity = Math.sign(pitchVelocity) * maxVelocity;
@@ -60,11 +64,14 @@ export function updatePlaneAxis(x, y, z, planePosition, camera) {
 
   y.applyAxisAngle(x, pitchVelocity);
   z.applyAxisAngle(x, pitchVelocity);
+  
+  console.log(x)
 
   x.normalize();
   y.normalize();
   z.normalize();
 
+  console.log(x)
 
   // plane position & velocity
   if (controls.shift) {

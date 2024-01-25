@@ -44,6 +44,7 @@ export function Airplane(props) {
     //desplazamiento automatico del avion en cada frame
     // planePosition.add(new Vector3(0, 0, -0.005));
 
+
     updatePlaneAxis(x, y, z, planePosition, camera);
 
     const rotMatrix = new Matrix4().makeBasis(x, y, z);
@@ -79,6 +80,7 @@ export function Airplane(props) {
 
     //aca manejamos la posicion de la camara, se mueve junto con el avion en una posicion y angulo fijo
     const cameraMatrix = new Matrix4()
+    //esto hace que siga el avion
       .multiply(
         new Matrix4().makeTranslation(
           planePosition.x,
@@ -86,8 +88,11 @@ export function Airplane(props) {
           planePosition.z
         )
       )
+      //esto rota la camara
       .multiply(new Matrix4().makeRotationX(-0.2))
+      //esto no solo hace girar la camara junto con el avion sino que retrasa el movimiento un poco para darle un mejor efecto
       .multiply(delayedRotMatrix)
+      //esto pone la camara atras del avion
       .multiply(new Matrix4().makeTranslation(0, 0.015, 0.3));
     //lo mismo con respecto a la camara
     camera.matrixAutoUpdate = false;
