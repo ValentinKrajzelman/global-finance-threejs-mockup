@@ -1,5 +1,9 @@
+//esta es la funcion que se encarga de aplicar el efecto de cada tecla en el juego
+//se llama la funcion principal en cada re-render para aplicar los efectos
+
 export let controls = {};
 
+//esta es la funcion que se aplica mas abajo para la velocidad del turbo
 function easeOutQuad(x) {
   return 1 - (1 - x) * (1 - x);
 }
@@ -14,6 +18,7 @@ window.addEventListener("keyup", (e) => {
   controls[e.key.toLowerCase()] = false;
 });
 
+//inicializa todos los valores por fuera de la funcion
 let maxVelocity = 0.04;
 let jawVelocity = 0;
 let pitchVelocity = 0;
@@ -29,10 +34,11 @@ export function updatePlaneAxis(x, y, z, planePosition, camera) {
   //math.sign indica si es positivo o negativo y lo multiplica por velmax para obligar a quede con el valor maximo
     jawVelocity = Math.sign(jawVelocity) * maxVelocity;
 
-
+    //lo mismo que arriba
   if (Math.abs(pitchVelocity) > maxVelocity) 
     pitchVelocity = Math.sign(pitchVelocity) * maxVelocity;
 
+    //toma cada techa y le da el efecto correspondiente
   if (controls["a"]) {
     jawVelocity += 0.0025;
   }
@@ -59,21 +65,25 @@ export function updatePlaneAxis(x, y, z, planePosition, camera) {
     planePosition.set(0, 3, 7);
   }
 
+  //aplica los angulos al avion mediante los ejes que se definen en el componente del avion y 
+  //se pasan por argumentos de la funcion, 
+  //al parecer afecta los objetos en el archivo airplane
   x.applyAxisAngle(z, jawVelocity);
   y.applyAxisAngle(z, jawVelocity);
 
   y.applyAxisAngle(x, pitchVelocity);
   z.applyAxisAngle(x, pitchVelocity);
   
-  console.log(x)
+  // console.log(x)
 
+  //no se que hace pero normaliza los valores, applyaxisangle requiere que sean valores normalizados
   x.normalize();
   y.normalize();
   z.normalize();
 
-  console.log(x)
+  // console.log(x)
 
-  // plane position & velocity
+  // aplica el efecto del turbo
   if (controls.shift) {
     turbo += 0.025;
   } else {
@@ -81,11 +91,12 @@ export function updatePlaneAxis(x, y, z, planePosition, camera) {
   }
   turbo = Math.min(Math.max(turbo, 0), 1);
 
+   //esto le da un efecto a la aplicacion del turbo "easeOut" que es una funcion 
   let turboSpeed = easeOutQuad(turbo) * 0.02;
 
+  //le da el efecto visual de velocidad al turbo
   camera.fov = 45 + turboSpeed * 900;
   camera.updateProjectionMatrix();
-
 
   planePosition.add(z.clone().multiplyScalar(-planeSpeed -turboSpeed));
 }

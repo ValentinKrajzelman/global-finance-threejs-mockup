@@ -25,7 +25,10 @@ const z = new Vector3(0, 0, 1);
 //posicion original del avion
 export const planePosition = new Vector3(0, 3, 7);
 
+//esto se usa para el efecto retardante del giro de la camara
+//es decir que la camara gira despues del avion
 const delayedRotMatrix = new Matrix4();
+//lo de abajo se usa para algo llamado interpolacion esferica(spherical interpolation)
 const delayedQuaternion = new Quaternion();
 
 export function Airplane(props) {
@@ -44,9 +47,10 @@ export function Airplane(props) {
     //desplazamiento automatico del avion en cada frame
     // planePosition.add(new Vector3(0, 0, -0.005));
 
-
+    //la funcion del archivo controls, sirve para recibir el input del user y modifica la posicion 
     updatePlaneAxis(x, y, z, planePosition, camera);
 
+    //la matrix de rotacion para el avion
     const rotMatrix = new Matrix4().makeBasis(x, y, z);
 
     //aca esta declarando una matrix4 por cada render, que a su vez se multiply con otras matrix
@@ -66,6 +70,7 @@ export function Airplane(props) {
     groupRef.current.matrix.copy(matrix);
     groupRef.current.matrixWorldNeedsUpdate = true;
 
+    //aca tenemos dos quaternion que representan cada uno la rotacion de la camara(a) y del avion(b)
     var quaternionA = new Quaternion().copy(delayedQuaternion);
     var quaternionB = new Quaternion();
     quaternionB.setFromRotationMatrix(rotMatrix);
@@ -74,7 +79,7 @@ export function Airplane(props) {
     var interpolatedQuaternion = new Quaternion().copy(quaternionA);
     interpolatedQuaternion.slerp(quaternionB, interpolationFactor);
     delayedQuaternion.copy(interpolatedQuaternion);
-
+ 
     delayedRotMatrix.identity();
     delayedRotMatrix.makeRotationFromQuaternion(delayedQuaternion);
 
