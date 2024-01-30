@@ -70,16 +70,23 @@ export function Airplane(props) {
     groupRef.current.matrix.copy(matrix);
     groupRef.current.matrixWorldNeedsUpdate = true;
 
-    //aca tenemos dos quaternion que representan cada uno la rotacion de la camara(a) y del avion(b)
-    var quaternionA = new Quaternion().copy(delayedQuaternion);
+    //abajo hay un par de lineas comentadas, por alguna razon el codigo original tenia varios pasos mas de 
+    //los necesarios, asi que los removi y el resultado es lo mismo
+    //perdi un poco la confianza en que tan bien hecho esta el tutorial y el proyecto
+
+   //inicializamos un quaternion con la rotacion actual del avion
+    // var quaternionA = new Quaternion().copy(delayedQuaternion);
     var quaternionB = new Quaternion();
     quaternionB.setFromRotationMatrix(rotMatrix);
 
+    //usando un interpolacion esferica (slerp) ponemos una diferencia temporal en el mismo movimiento 
+    //de dos quaternion
     var interpolationFactor = 0.175;
-    var interpolatedQuaternion = new Quaternion().copy(quaternionA);
-    interpolatedQuaternion.slerp(quaternionB, interpolationFactor);
-    delayedQuaternion.copy(interpolatedQuaternion);
+    // var interpolatedQuaternion = new Quaternion().copy(quaternionA);
+    delayedQuaternion.slerp(quaternionB, interpolationFactor);
+    // delayedQuaternion.copy(interpolatedQuaternion);
  
+    //asignamos el movimiento retrasado en la matriz al eje de rotacion de la camara
     delayedRotMatrix.identity();
     delayedRotMatrix.makeRotationFromQuaternion(delayedQuaternion);
 
