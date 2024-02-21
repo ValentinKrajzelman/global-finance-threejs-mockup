@@ -23,6 +23,10 @@ import {
 import { BackSide, Color, MeshStandardMaterial } from "three";
 import mapaa from "../../public/envmap.jpg";
 import { Airplane } from "./Airplane";
+import { MotionBlur } from "./MotionBlur";
+import { Targets } from "./Targets";
+import { EffectComposer, HueSaturation } from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
 
 export default function Cuadrado() {
   const mapa = useTexture(mapaa.src);
@@ -30,7 +34,7 @@ export default function Cuadrado() {
   //extraemos la geometria y materiales de scene
   const { nodes, materials } = useGLTF("/scene.glb");
 
-  //no estoy muy seguro de como funciona esto pero creo que modifica el "Material.009" 
+  //no estoy muy seguro de como funciona esto pero creo que modifica el "Material.009"
   //dentro de materials, lo hace una sola vez cuando se carga por primera vez materials
   useEffect(() => {
     const landscapeMat = materials["Material.009"];
@@ -43,7 +47,7 @@ export default function Cuadrado() {
     treesMat.metalness = 0;
   }, [materials]);
 
-  // creamos dos materials mas, el de la luz usa un "emissive shader" significa que emite luz del color especificado 
+  // creamos dos materials mas, el de la luz usa un "emissive shader" significa que emite luz del color especificado
   //es segundo es un material reflectante, muy pesado de usar por que re-renderiza toda la escena para actualizar el reflejo
   const [lightsMaterial, waterMaterial] = useMemo(() => {
     return [
@@ -112,8 +116,8 @@ export default function Cuadrado() {
           shadow-camera-right={6.4}
         />
 
-        <Airplane/>
-
+        <Airplane />
+        <Targets />
         {/* este es el terreno, cada uno de los mesh es un nodo de geometria de blender*/}
         <group dispose={null}>
           <mesh
@@ -162,6 +166,16 @@ export default function Cuadrado() {
             castShadow
           />
         </group>
+
+        {/* aplica el motion blur definido en el otro componente */}
+        <EffectComposer>
+          <MotionBlur />
+          <HueSaturation
+            blendFunction={BlendFunction.NORMAL} // blend mode
+            hue={-0.15} // hue in radians
+            saturation={0.1} // saturation in radians
+          />
+        </EffectComposer>
       </Suspense>
     </>
   );
